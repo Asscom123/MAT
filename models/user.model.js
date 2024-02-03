@@ -1,5 +1,9 @@
+// user.model.js
 import { getData } from '../config/connection.config.js';
 import { DataTypes } from 'sequelize';
+import bcrypt from 'bcrypt';
+
+const saltRounds = 10; // Número de rounds para la generación del hash
 
 const user = getData.sequelizeClient.define(
     "user", {
@@ -21,14 +25,19 @@ const user = getData.sequelizeClient.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        correo: {
+        email: {
             type: DataTypes.STRING,
             allowNull: true,
+            unique: true,
             validate: {
                 isEmail: {
                     msg: 'Ingrese un correo electrónico válido',
                 },
             },
+        },
+        contrasena: {
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         fechaNacimiento: {
             type: DataTypes.DATE,
@@ -60,9 +69,35 @@ const user = getData.sequelizeClient.define(
             allowNull: false,
             defaultValue: true,
         },
+        rol: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            validate: {
+                isIn: {
+                    args: [
+                        [1, 2]
+                    ],
+                    msg: 'El campo rol debe ser 1 para administrador o 2 para usuario',
+                },
+            },
+        },
+        token: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     }, {
         tableName: "user",
         freezeTableName: true,
+        hooks: {
+            beforeCreate: async(user) => {
+                user.contrasena = await bcrypt.hash(user.contrasena, saltRounds);
+            },
+            beforeUpdate: async(user) => {
+                if (user.changed('contrasena')) {
+                    user.contrasena = await bcrypt.hash(user.contrasena, saltRounds);
+                }
+            },
+        },
     }
 );
 
