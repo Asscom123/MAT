@@ -1,29 +1,27 @@
-import path from "path";
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import multer from "multer";
 import { getUsers } from "../models/user.model.js";
 import { emailController } from './email.controller.js';
 
-const __filename = fileURLToPath(
-    import.meta.url);
-const __dirname = path.dirname(__filename);
-const data = dotenv.config({
-    path: path.resolve(__dirname, `../environments/.env.${process.env.NODE_ENV}`),
-});
-
 const user_view = async function(req, res) {
     try {
-        const usuarios = await getUsers.user.findAll();
+        // Obtener todos los usuarios con todos sus atributos
+        const usuarios = await getUsers.user.findAll({ raw: true });
+
+        // Verificar si se encontraron usuarios
+        if (!usuarios || usuarios.length === 0) {
+            return res.status(404).json({ error: "No se encontraron usuarios" });
+        }
+
+        // Devolver la lista de usuarios
         res.json(usuarios);
     } catch (error) {
-        console.error("Error fetching usuarios:", error);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error("Error al obtener usuarios:", error);
+        res.status(500).json({ error: "Error interno del servidor" });
     }
 };
 
 const user_create = async function(req, res) {
     try {
+        // Obtener los datos del cuerpo de la solicitud
         const {
             nombre,
             apellidoP,
@@ -39,64 +37,42 @@ const user_create = async function(req, res) {
             rol,
         } = req.body;
 
-        if (!nombre ||
-            !apellidoP ||
-            !apellidoM ||
-            !email ||
-            !contrasena ||
-            !fechaNacimiento ||
-            !genero ||
-            !numCel ||
-            !cargo ||
-            !horarioDeTrabajo ||
-            !rol
-        ) {
+        // Validar que se proporcionen todos los campos requeridos
+        if (!nombre || !apellidoP || !apellidoM || !email || !contrasena || !fechaNacimiento || !genero || !numCel || !cargo || !horarioDeTrabajo || !rol) {
             return res.status(400).json({ error: 'Todos los campos son obligatorios' });
         }
 
-        // Validar que numCel contenga solo dígitos
+        // Validar el formato del número de celular
         if (!/^\d+$/.test(numCel)) {
-            return res
-                .status(400)
-                .json({ error: 'El número de celular debe contener solo dígitos numéricos' });
+            return res.status(400).json({ error: 'El número de celular debe contener solo dígitos numéricos' });
         }
 
-        // Validar que numCel tenga exactamente 10 dígitos
+        // Validar la longitud del número de celular
         if (numCel.length !== 10) {
-            return res.status(400).json({
-                error: 'El número de celular debe tener exactamente 10 dígitos',
-            });
+            return res.status(400).json({ error: 'El número de celular debe tener exactamente 10 dígitos' });
         }
 
-        const fechaNacimientoFormateada = formatearFecha(fechaNacimiento);
-
-        if (!fechaNacimientoFormateada) {
-            return res.status(400).json({ error: 'Formato de fecha inválido' });
-        }
-
-        // Intenta crear el usuario
-        const usuario = await getUsers.user.create({
+        // Crear el usuario
+        await getUsers.create({
             nombre,
             apellidoP,
             apellidoM,
             email,
             contrasena,
-            fechaNacimiento: fechaNacimientoFormateada,
+            fechaNacimiento,
             genero,
             numCel,
             cargo,
             horarioDeTrabajo,
             status,
             rol,
-        });
+        }, { fields: ["idUsuario", "nombre", "apellidoP", "apellidoM", "email", "contrasena", "fechaNacimiento", "genero", "numCel", "cargo", "horarioDeTrabajo", "status", "rol"] });
 
-        // Envía el correo de bienvenida solo si el rol es 2 (usuario)
+        // Enviar correo de bienvenida si el rol es 2 (usuario)
         if (rol === 2) {
             try {
-                // Mensaje de bienvenida y motivacional personalizado
                 const asunto = '¡Bienvenido a Asscom!';
                 const mensajeMotivacional = mensajeMotivacionalPersonalizado(nombre);
-
                 await emailController.enviarCorreoConfirmacion(email, asunto, mensajeMotivacional);
                 console.log(`Correo de bienvenida enviado a ${email}`);
             } catch (error) {
@@ -113,10 +89,6 @@ const user_create = async function(req, res) {
         res.status(500).json({ error: 'Error Interno del Servidor' });
     }
 };
-
-const mensajeMotivacionalPersonalizado = (nombre) =>
-    `¡Bienvenido a Asscom, ${nombre}! Estamos emocionados de tenerte en nuestro equipo. En Asscom, creemos en el potencial ilimitado de cada miembro. Tu contribución es valiosa, y juntos construiremos un camino de éxitos. ¡Haz de cada día una oportunidad para destacar y lograr grandes cosas! #AsscomTeam`;
-
 
 const user_update = async function(req, res) {
     try {
@@ -136,37 +108,25 @@ const user_update = async function(req, res) {
             rol,
         } = req.body;
 
-        if (!nombre ||
-            !apellidoP ||
-            !apellidoM ||
-            !email ||
-            !contrasena ||
-            !fechaNacimiento ||
-            !genero ||
-            !numCel ||
-            !cargo ||
-            !horarioDeTrabajo ||
-            !rol
-        ) {
+        // Validar que se proporcionen todos los campos requeridos
+        if (!nombre || !apellidoP || !apellidoM || !email || !contrasena || !fechaNacimiento || !genero || !numCel || !cargo || !horarioDeTrabajo || !rol) {
             return res.status(400).json({ error: "Todos los campos son obligatorios" });
         }
 
-        // Validar que numCel contenga solo dígitos
+        // Validar el formato del número de celular
         if (!/^\d+$/.test(numCel)) {
-            return res
-                .status(400)
-                .json({ error: "El número de celular debe contener solo dígitos numéricos" });
+            return res.status(400).json({ error: "El número de celular debe contener solo dígitos numéricos" });
         }
 
-        // Validar que numCel tenga exactamente 10 dígitos
+        // Validar la longitud del número de celular
         if (numCel.length !== 10) {
-            return res.status(400).json({
-                error: "El número de celular debe tener exactamente 10 dígitos",
-            });
+            return res.status(400).json({ error: "El número de celular debe tener exactamente 10 dígitos" });
         }
 
+        // Buscar el usuario por ID
         const usuario = await getUsers.user.findOne({ where: { idUsuario: id } });
 
+        // Verificar si se encontró el usuario
         if (!usuario) {
             return res.status(404).json({ error: "Usuario no encontrado" });
         }
@@ -175,17 +135,17 @@ const user_update = async function(req, res) {
         if (email !== usuario.email) {
             // Intentar actualizar el correo, capturar error si ya existe
             try {
-                await usuario.update({ email: email });
+                await usuario.update({ email });
                 console.log(`Correo actualizado para el usuario con ID ${id}`);
             } catch (error) {
                 if (error.name === 'SequelizeUniqueConstraintError') {
                     return res.status(400).json({ error: 'El correo electrónico ya está registrado.' });
                 }
-                throw error; // Si el error no es de correo duplicado, lanzarlo nuevamente
+                throw error;
             }
         }
 
-        // Actualiza el resto de la información del usuario con el rol especificado
+        // Actualizar el resto de la información del usuario con el rol especificado
         await usuario.update({
             nombre,
             apellidoP,
@@ -211,7 +171,6 @@ const user_update = async function(req, res) {
             }
         }
 
-
         res.json({ success: true, message: "Usuario actualizado exitosamente" });
     } catch (error) {
         console.error("Error al actualizar usuario:", error);
@@ -219,17 +178,19 @@ const user_update = async function(req, res) {
     }
 };
 
-
-
 const user_delete = async function(req, res) {
     try {
-        const idUsuario = req.params.idUsuario;
-        const usuario = await getUsers.user.findOne({ where: { idUsuario: idUsuario } });
+        const { idUsuario } = req.params;
 
+        // Buscar el usuario por ID
+        const usuario = await getUsers.user.findOne({ where: { idUsuario } });
+
+        // Verificar si se encontró el usuario
         if (!usuario) {
             return res.status(404).json({ error: "Usuario no encontrado" });
         }
 
+        // Eliminar el usuario
         await usuario.destroy();
 
         res.json({ success: true, message: "Usuario eliminado exitosamente" });
@@ -239,19 +200,12 @@ const user_delete = async function(req, res) {
     }
 };
 
+const mensajeMotivacionalPersonalizado = (nombre) =>
+    `¡Bienvenido a Asscom, ${nombre}! Estamos emocionados de tenerte en nuestro equipo. En Asscom, creemos en el potencial ilimitado de cada miembro. Tu contribución es valiosa, y juntos construiremos un camino de éxitos. ¡Haz de cada día una oportunidad para destacar y lograr grandes cosas! #AsscomTeam`;
+
 export const userController = {
+    user_view,
     user_create,
     user_update,
-    user_view,
     user_delete,
 };
-
-// Función para formatear la fecha
-function formatearFecha(fecha) {
-    const partesFecha = fecha.split("-");
-    if (partesFecha.length === 3) {
-        return `${partesFecha[2]}-${partesFecha[1]}-${partesFecha[0]}`;
-    } else {
-        return null;
-    }
-}

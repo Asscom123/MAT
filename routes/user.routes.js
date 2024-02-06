@@ -67,7 +67,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
  *        description: Datos de usuario inválidos o faltantes
  */
 
-router.post('/create', (req, res) => userController.user_create(req, res));
+router.post('/create', (req, res, ) => userController.user_create(req, res));
 
 /**
  * @openapi
@@ -136,7 +136,7 @@ router.post('/create', (req, res) => userController.user_create(req, res));
  *      404:
  *        description: Usuario no encontrado
  */
-router.put('/update/:id', (req, res) => verifyToken(req, res, next), (req, res) => userController.user_update(req, res));
+router.put('/update/:id', (req, res, next) => verifyToken(req, res, next), (req, res) => userController.user_update(req, res));
 
 
 /**
@@ -162,7 +162,7 @@ router.put('/update/:id', (req, res) => verifyToken(req, res, next), (req, res) 
  *      404:
  *        description: Usuario no encontrado
  */
-router.delete('/delete/:idUsuario', (req, res) => verifyToken(req, res, next), (req, res) => userController.user_delete(req, res));
+router.delete('/delete/:idUsuario', (req, res, next) => verifyToken(req, res, next), (req, res) => userController.user_delete(req, res));
 
 
 
@@ -181,6 +181,6 @@ router.delete('/delete/:idUsuario', (req, res) => verifyToken(req, res, next), (
  *        description: Error interno del servidor
  */
 
-router.get('/view', (req, res) => verifyToken(req, res, next), (req, res) => userController.user_view(req, res));
+router.get('/view', (req, res, next) => verifyToken(req, res, next), (req, res) => userController.user_view(req, res));
 
 export default router;

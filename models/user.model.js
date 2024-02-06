@@ -1,12 +1,12 @@
 // user.model.js
 import { getData } from '../config/connection.config.js';
 import { DataTypes } from 'sequelize';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 
 const saltRounds = 10; // Número de rounds para la generación del hash
 
-const user = getData.sequelizeClient.define(
-    "user", {
+const users = getData.sequelizeClient.define(
+    "users", {
         idUsuario: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
@@ -101,4 +101,4 @@ const user = getData.sequelizeClient.define(
     }
 );
 
-export const getUsers = { user };
+export const getUsers = users;

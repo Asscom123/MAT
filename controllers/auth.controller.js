@@ -1,7 +1,8 @@
 // auth.controller.js
 import { getUsers } from '../models/user.model.js';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken';
+import { dataEnv } from '../config/env.config.js';
 
 const saltRounds = 10; // Número de rounds para la generación del hash
 const secretKey = process.env.JWT_SECRET_KEY || 'default_clave_secreta'; // Reemplaza esto con una clave secreta más segura en un entorno de producción
@@ -23,29 +24,29 @@ function verificarToken(token) {
 }
 
 // Función para el inicio de sesión
-const login = async function(req, res) {
+const login = async(req, res) => {
+    const { email, contrasena } = req.body;
     try {
-        const { email, contrasena } = req.body;
 
         // Verificar si el usuario existe
-        const usuario = await getUsers.user.findOne({ where: { email } });
+        const user = await getUsers.findOne({ where: { email } });
 
-        if (!usuario) {
-            return res.status(401).json({ error: "Credenciales inválidas" });
+        if (!user) {
+            return res.status(404).json({ error: "Usuario no encontrado" });
         }
 
         // Verificar la contraseña
-        const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
+        const validPassword = bcryptjs.compareSync(contrasena, user.contrasena);
 
-        if (!contrasenaValida) {
-            return res.status(401).json({ error: "Credenciales inválidas" });
+        if (!validPassword) {
+            return res.status(401).json({ error: "Contraseña inválida" });
         }
 
         // Generar y almacenar un nuevo token en cada inicio de sesión
-        const token = generarToken(usuario.idUsuario);
-        await usuario.update({ token });
+        const token = jwt.sign({ iidUsuario: user.idUsuario }, dataEnv.parsed.JWT_TOKEN_SECRET, {
 
-        res.json({ success: true, message: "Inicio de sesión exitoso", token });
+        });
+        return res.status(200).json({ error: null, data: { token, users: user.idUsuario }, message: "Inicio de sesión exitoso" });
     } catch (error) {
         console.error("Error en el inicio de sesión:", error);
         res.status(500).json({ error: "Error interno del Servidor" });
