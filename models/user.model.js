@@ -81,10 +81,6 @@ const users = getData.sequelizeClient.define(
                 },
             },
         },
-        token: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
     }, {
         tableName: "user",
         freezeTableName: true,

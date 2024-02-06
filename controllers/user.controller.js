@@ -1,22 +1,14 @@
 import { getUsers } from "../models/user.model.js";
 import { emailController } from './email.controller.js';
 
-const user_view = async function(req, res) {
-    try {
-        // Obtener todos los usuarios con todos sus atributos
-        const usuarios = await getUsers.user.findAll({ raw: true });
-
-        // Verificar si se encontraron usuarios
-        if (!usuarios || usuarios.length === 0) {
-            return res.status(404).json({ error: "No se encontraron usuarios" });
-        }
-
-        // Devolver la lista de usuarios
-        res.json(usuarios);
-    } catch (error) {
-        console.error("Error al obtener usuarios:", error);
-        res.status(500).json({ error: "Error interno del servidor" });
-    }
+const user_view = async (req, res) => {
+    getUsers.findAll({
+        atributes: ["nombre", "apellidoP", "apellidoM", "email", "contrasena", "fechaNacimiento", "genero", "numCel", "cargo", "horarioDeTrabajo", "status", "rol"]
+    }).then(users => {
+        res.send(users)
+    }).catch (err => {
+        console.log (err);
+    });
 };
 
 const user_create = async function(req, res) {
@@ -124,7 +116,7 @@ const user_update = async function(req, res) {
         }
 
         // Buscar el usuario por ID
-        const usuario = await getUsers.user.findOne({ where: { idUsuario: id } });
+        const usuario = await getUsers.findOne({ where: { idUsuario: id } });
 
         // Verificar si se encontró el usuario
         if (!usuario) {
@@ -146,19 +138,19 @@ const user_update = async function(req, res) {
         }
 
         // Actualizar el resto de la información del usuario con el rol especificado
-        await usuario.update({
-            nombre,
-            apellidoP,
-            apellidoM,
-            email,
-            contrasena,
-            fechaNacimiento,
-            genero,
-            numCel,
-            cargo,
-            horarioDeTrabajo,
-            status,
-            rol,
+        usuario.update({
+            nombre:nombre,
+            apellidoP:apellidoP,
+            apellidoM:apellidoM,
+            email:email,
+            contrasena:contrasena,
+            fechaNacimiento:fechaNacimiento,
+            genero:genero,
+            numCel:numCel,
+            cargo:cargo,
+            horarioDeTrabajo:horarioDeTrabajo,
+            status:status,
+            rol:rol,
         });
 
         // No enviar correo si el rol es 1 (administrador)
@@ -183,7 +175,7 @@ const user_delete = async function(req, res) {
         const { idUsuario } = req.params;
 
         // Buscar el usuario por ID
-        const usuario = await getUsers.user.findOne({ where: { idUsuario } });
+        const usuario = await getUsers.findOne({ where: { idUsuario } });
 
         // Verificar si se encontró el usuario
         if (!usuario) {
@@ -191,7 +183,7 @@ const user_delete = async function(req, res) {
         }
 
         // Eliminar el usuario
-        await usuario.destroy();
+        usuario.destroy();
 
         res.json({ success: true, message: "Usuario eliminado exitosamente" });
     } catch (error) {
