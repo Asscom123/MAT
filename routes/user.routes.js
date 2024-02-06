@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import bodyParser from 'body-parser';
 import { userController } from '../controllers/user.controller.js';
+import verifyToken from '../middlewares/token.middleware.js';
 
 const router = Router();
 
@@ -135,7 +136,7 @@ router.post('/create', (req, res) => userController.user_create(req, res));
  *      404:
  *        description: Usuario no encontrado
  */
-router.put('/update/:id', (req, res) => userController.user_update(req, res));
+router.put('/update/:id', (req, res) =>verifyToken (req, res, next), userController.user_update(req, res));
 
 
 /**
@@ -161,7 +162,7 @@ router.put('/update/:id', (req, res) => userController.user_update(req, res));
  *      404:
  *        description: Usuario no encontrado
  */
-router.delete('/delete/:idUsuario', (req, res) => userController.user_delete(req, res));
+router.delete('/delete/:idUsuario', (req, res) =>verifyToken (req, res, next), userController.user_delete(req, res));
 
 
 
@@ -180,6 +181,6 @@ router.delete('/delete/:idUsuario', (req, res) => userController.user_delete(req
  *        description: Error interno del servidor
  */
 
-router.get('/view', (req, res) => userController.user_view(req, res));
+router.get('/view', (req, res) => verifyToken (req, res, next), userController.user_view(req, res));
 
 export default router;

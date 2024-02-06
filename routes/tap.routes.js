@@ -69,7 +69,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false });
  *        description: Datos de TAP inválidos o faltantes
  */
 
-router.post('/create', (req, res) => tapController.tap_create(req, res));
+router.post('/create', (req, res) =>verifyToken (req, res, next), tapController.tap_create(req, res));
 
 /**
  * @openapi
@@ -140,7 +140,7 @@ router.post('/create', (req, res) => tapController.tap_create(req, res));
  *      404:
  *        description: TAP no encontrado
  */
-router.put('/update/:id', (req, res) => tapController.tap_update(req, res));
+router.put('/update/:id', (req, res) =>verifyToken (req, res, next), tapController.tap_update(req, res));
 
 /**
  * @openapi
@@ -164,7 +164,7 @@ router.put('/update/:id', (req, res) => tapController.tap_update(req, res));
  *      404:
  *        description: TAP no encontrado
  */
-router.delete('/delete/:idTap', (req, res) => tapController.tap_delete(req, res));
+router.delete('/delete/:idTap', (req, res) =>verifyToken (req, res, next), tapController.tap_delete(req, res));
 
 /**
  * @openapi
@@ -179,6 +179,6 @@ router.delete('/delete/:idTap', (req, res) => tapController.tap_delete(req, res)
  *      500:
  *        description: Error interno del servidor
  */
-router.get('/view', (req, res) => tapController.tap_view(req, res));
+router.get('/view', (req, res) =>verifyToken (req, res, next), tapController.tap_view(req, res));
 
 export default router;
