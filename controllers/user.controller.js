@@ -1,13 +1,13 @@
 import { getUsers } from "../models/user.model.js";
 import { emailController } from './email.controller.js';
 
-const user_view = async (req, res) => {
+const user_view = async(req, res) => {
     getUsers.findAll({
         atributes: ["nombre", "apellidoP", "apellidoM", "email", "contrasena", "fechaNacimiento", "genero", "numCel", "cargo", "horarioDeTrabajo", "status", "rol"]
     }).then(users => {
         res.send(users)
-    }).catch (err => {
-        console.log (err);
+    }).catch(err => {
+        console.log(err);
     });
 };
 
@@ -139,18 +139,18 @@ const user_update = async function(req, res) {
 
         // Actualizar el resto de la información del usuario con el rol especificado
         usuario.update({
-            nombre:nombre,
-            apellidoP:apellidoP,
-            apellidoM:apellidoM,
-            email:email,
-            contrasena:contrasena,
-            fechaNacimiento:fechaNacimiento,
-            genero:genero,
-            numCel:numCel,
-            cargo:cargo,
-            horarioDeTrabajo:horarioDeTrabajo,
-            status:status,
-            rol:rol,
+            nombre: nombre,
+            apellidoP: apellidoP,
+            apellidoM: apellidoM,
+            email: email,
+            contrasena: contrasena,
+            fechaNacimiento: fechaNacimiento,
+            genero: genero,
+            numCel: numCel,
+            cargo: cargo,
+            horarioDeTrabajo: horarioDeTrabajo,
+            status: status,
+            rol: rol,
         });
 
         // No enviar correo si el rol es 1 (administrador)

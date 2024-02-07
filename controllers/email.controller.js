@@ -48,6 +48,7 @@ const generarCuerpoConEstilosColoridos = (mensaje) => {
                     }
                     p {
                         color: #000000; /* negro */
+                        text-align: justify; /* Alineación justificada */
                     }
                     img {
                         max-width: 100%;
