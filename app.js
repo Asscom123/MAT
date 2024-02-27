@@ -4,6 +4,7 @@ import swaggerDocs from './config/swagger.config.js';
 import userRoutes from './routes/user.routes.js';
 import tapRoutes from './routes/tap.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import supplierRoutes from './routes/supplier.routes.js';
 
 const app = express();
 app.use(cors());
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use('/api/tap', tapRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/supplier', supplierRoutes);
 
 const PORT = 3000;
 

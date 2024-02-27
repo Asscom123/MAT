@@ -153,16 +153,6 @@ const user_update = async function(req, res) {
             rol: rol,
         });
 
-        // No enviar correo si el rol es 1 (administrador)
-        if (rol === 2) {
-            try {
-                await emailController.enviarCorreoActualizacion(email);
-                console.log(`Correo de actualización enviado para el usuario con correo electrónico ${email}`);
-            } catch (error) {
-                console.error('Error al enviar el correo de actualización:', error);
-            }
-        }
-
         res.json({ success: true, message: "Usuario actualizado exitosamente" });
     } catch (error) {
         console.error("Error al actualizar usuario:", error);
