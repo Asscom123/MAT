@@ -8,7 +8,7 @@ const saltRounds = 10; // Número de rounds para la generación del hash
 const secretKey = process.env.JWT_SECRET_KEY || 'default_clave_secreta'; // Reemplaza esto con una clave secreta más segura en un entorno de producción
 
 // Función para generar un token
-function generarToken(usuarioId, expiresIn = '1h') {
+function generarToken(usuarioId, expiresIn = '12h') {
     const token = jwt.sign({ usuarioId }, secretKey, { expiresIn });
     return token;
 }
