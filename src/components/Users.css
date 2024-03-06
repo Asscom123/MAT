@@ -1,26 +1,6 @@
-.prueba1-child {
-    width: 1280px;
-    position: relative;
-    background-color: rgba(0, 104, 104, 0.33);
-    height: 77px;
-    z-index: 0;
-  }
-  .logo-1-icon {
-    width: 162px;
-    position: absolute;
-    margin: 0 !important;
-    top: 9px;
-    left: 40px;
-    height: 60px;
-    overflow: hidden;
-    flex-shrink: 0;
-    cursor: pointer;
-    z-index: 1;
-  }
-  .prueba1 {
-    width: 100%;
-    height: 100vh;
-    
+.prueba1 {
+    width: 96vw;
+    height: 100%;
     position: relative;
     background-color: #f5f5f5;
 
@@ -33,4 +13,65 @@
     box-sizing: border-box;
     gap: 10px 0;
   }
-  
+  .prueba1 .prueba1-child {
+    width: 96vw;
+    position: relative;
+    background-color: rgba(0, 104, 104, 0.33);
+    height: 77px;
+    z-index: 0;
+  }
+  .prueba1 .logo {
+    width: 162px;
+    position: absolute;
+    margin: 0 !important;
+    top: 9px;
+    left: 40px;
+    height: 60px;
+    overflow: hidden;
+    flex-shrink: 0;
+    cursor: pointer;
+    z-index: 1;
+  }
+.prueba1 .fecha{
+  height: 31px;
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.prueba1 .messajes {
+  width: 4%; /* Cambia el ancho según sea necesario */
+  position: absolute;
+  margin: 0 !important;
+  top: 20px;
+  left: 73%; /* Cambia la posición según sea necesario */
+  height: 40px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.prueba1 .fecha {
+  font-family: "Inria Sans", sans-serif;
+  position: absolute;
+  margin: 0 !important;
+  top: 26px;
+  left: 80%; /* Cambia la posición según sea necesario */
+  height: 40px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+  z-index: 1;
+  font-size: 20px;
+}
+
+/* Estilo para las filas impares */
+.container .table-striped tbody tr:nth-of-type(odd) {
+  background-color: #046c6c !important;
+  color: white !important; /* Cambiar el color del texto para contrastar */
+}
+
+
+

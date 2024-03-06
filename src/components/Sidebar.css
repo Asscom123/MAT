@@ -32,7 +32,8 @@
     line-height: 0;
   }
   .bars {
-    width: 30px;
+    font-size: 25px;
+    width: 35px;
   }
   .hide {
     display: none;
@@ -61,12 +62,13 @@
     gap: 5px;
   }
   .link {
+    text-decoration: none !important; 
     display: flex;
     color: white;
-    gap: 10px;
-    padding: 5px 10px;
+    gap: 15px;transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    padding: 6px 10px;
     border-right: 4px solid transparent;
-    transition: 0.2s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    
   }
   .link:hover {
     border-right: 4px solid white;
@@ -79,7 +81,10 @@
   }
   .link_text {
     white-space: nowrap;
-    font-size: 15px;
+    font-size: 21px;
+    line-height: 45px;
+    font-family: "Inria Sans", sans-serif;
+    text-decoration: none !important; 
   }
   
   .menu {
@@ -102,4 +107,7 @@
   .menu_container .link {
     padding-left: 20px;
     border-bottom: #fff 0.5px solid;
+  }
+  .icon{
+    font-size: 25px;
   }

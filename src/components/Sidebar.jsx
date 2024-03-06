@@ -27,7 +27,7 @@ const routes = [
     icon: <IoDocumentTextOutline />,
   },
   {
-    path: "/login",
+    path: "/",
     name: "Cerrar Sesión",
     icon: <CiLogin />,
   },
