@@ -68,10 +68,41 @@
 }
 
 /* Estilo para las filas impares */
-.container .table-striped tbody tr:nth-of-type(odd) {
+.prueba1 .table-striped tbody tr:nth-of-type(odd) {
   background-color: #046c6c !important;
   color: white !important; /* Cambiar el color del texto para contrastar */
 }
+
+.prueba1 .btn-orange {
+  background-color: #FF912B; /* Código de color para naranja */
+  color: #fff; /* Color del texto */
+}
+.prueba1 .btn-orange:hover {
+  background-color: #FF912B; /* Cambia el color al pasar el ratón */
+  border-color: #FF912B; /* Cambia el color del borde al pasar el ratón */
+}
+
+.prueba1 .container .btn-custom {
+  background-color: #158F69;
+  border-color: #158F69;
+  /* Otros estilos opcionales */
+  color: white; /* Color del texto */
+}
+
+.container .btn-custom:hover {
+  background-color: #158F69; /* Cambia el color al pasar el ratón */
+  border-color: #158F69; /* Cambia el color del borde al pasar el ratón */
+}
+
+.prueba1 .btn-print {
+  background-color: #0AE247; /* Código de color para naranja */
+  color: #fff; /* Color del texto */
+}
+.prueba1 .btn-print:hover {
+  background-color: #0AE247; /* Cambia el color al pasar el ratón */
+  border-color: #0AE247; /* Cambia el color del borde al pasar el ratón */
+}
+
 
 
 

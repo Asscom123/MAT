@@ -25,7 +25,7 @@ const FrameComponent = () => {
         </div>
       </div>
       <div className="frame-group">
-        <div className="rectangle-group">
+      <div className="rectangle-group">
           <div className="frame-inner" />
           <img
             className="customer-icon"
@@ -35,6 +35,7 @@ const FrameComponent = () => {
           />
           <b className="usuario">Usuario</b> 
         </div>
+
         <div className="rectangle-container">
           <div className="rectangle-div" />
           <img

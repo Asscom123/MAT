@@ -8,7 +8,7 @@ import {FaUserCircle} from 'react-icons/fa';
 import {CiLogin} from 'react-icons/ci';
 import {LuUsers2} from 'react-icons/lu';
 import {IoIosMenu} from 'react-icons/io';
-import {IoDocumentTextOutline} from 'react-icons/io5';
+import {IoDocumentTextOutline, IoDocumentText} from 'react-icons/io5';
 import 'bootstrap/dist/css/bootstrap.min.css'
 const routes = [
   {
@@ -22,9 +22,14 @@ const routes = [
     icon: <LuUsers2 />,
   },
   {
-    path: "/documentos",
-    name: "Documentos",
+    path: "/RAD",
+    name: "RAD",
     icon: <IoDocumentTextOutline />,
+  },
+  {
+    path: "/RAM",
+    name: "RAM",
+    icon: <IoDocumentText />,
   },
   {
     path: "/",
