@@ -1,12 +1,15 @@
-.usuario-label {
-  margin-right: 1px; /* Ajusta el margen entre el icono y el label */
-  border: none; /* Quita el contorno del label */
-  font-size: 20px; /* Ajusta el tamaño del texto del label */
+.usuario {
+  width: 400px; /* Ajusta el ancho según sea necesario */
+  height: 50px; /* Ajusta la altura según sea necesario */
+  margin-left: -80px;
+  margin-top: 10px; /* Mueve el input hacia abajo */
 }
 
-
-.usuario-input {
-  flex: 0; /* El input ocupa todo el espacio restante */
+.contrasea {
+  width: 350px; /* Ajusta el ancho según sea necesario */
+  height: 50px; /* Ajusta la altura según sea necesario */
+  margin-left: -70px;
+  margin-top: 10px; /* Mueve el input hacia abajo */
 }
 
 .bienvenido,
@@ -67,8 +70,7 @@
   width: 33px;
   object-fit: contain;
 }
-.customer-icon,
-.usuario {
+.customer-icon{
   position: relative;
   z-index: 4;
 }
@@ -100,7 +102,7 @@
   width: 40px;
   object-fit: contain;
 }
-.contrasea,
+
 .secure-icon {
   position: relative;
   z-index: 4;
@@ -188,6 +190,7 @@
   }
   .usuario {
     font-size: 16px;
+    align-items: center;
   }
   .rectangle-group {
     flex-wrap: wrap;

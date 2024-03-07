@@ -26,14 +26,15 @@ const FrameComponent = () => {
       </div>
       <div className="frame-group">
       <div className="rectangle-group">
-          <div className="frame-inner" />
+        <div className="frame-inner" />
+        
           <img
             className="customer-icon"
             loading="eager"
             alt=""
             src={User}
-          />
-          <b className="usuario">Usuario</b> 
+          /> 
+          <input className='form-control usuario' type="email"  id='email' placeholder="Usuario"></input>
         </div>
 
         <div className="rectangle-container">
@@ -44,9 +45,7 @@ const FrameComponent = () => {
             alt=""
             src={Password}
           />
-          <div className="contrasea-wrapper">
-            <b className="contrasea">Contraseña</b>
-          </div>
+          <input className='form-control contrasea' type="email"  id='password' placeholder="Contraseña"></input>
         </div>
       </div>
       <div className="init-session-frame">
