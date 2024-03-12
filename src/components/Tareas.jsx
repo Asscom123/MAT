@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import './Tareas.css';
 import Logo from '../assets/Logo.png'
-import Mensaje from '../assets/messaje.png'
+import Alarm from '../assets/alarm.png'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint} from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
@@ -146,7 +146,7 @@ class Tareas extends Component {
         />
         <img className="messajes"
           alt=""
-          src={Mensaje}
+          src={Alarm}
           />
         <div className="fecha">{currentDate}</div>
         <br/>    

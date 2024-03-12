@@ -41,12 +41,12 @@
 }
 
 .personal .messajes {
-  width: 4%; /* Cambia el ancho según sea necesario */
+  width: 2%; /* Cambia el ancho según sea necesario */
   position: absolute;
   margin: 0 !important;
-  top: 20px;
+  top: 25px;
   left: 73%; /* Cambia la posición según sea necesario */
-  height: 40px;
+  height: 30px;
   overflow: hidden;
   flex-shrink: 0;
   cursor: pointer;
