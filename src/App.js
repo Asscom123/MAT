@@ -10,6 +10,8 @@ import Documents from './components/RAM';
 import RAD from './components/RAD';
 import RAM from './components/RAM';
 import Tareas from './components/Tareas';
+import OrdenesDeCompra from './components/OrdenesDeCompra';
+import OrdenesDePago from './components/OrdenesDePago';
 
 function App() {
   // Supongamos que tienes una variable en tu estado que indica si el usuario es administrador o personal
@@ -33,6 +35,8 @@ function App() {
             <SidebarPersonal> 
               <Routes>
                 <Route path='/tareas' element={<Tareas />} />
+                <Route path='/ordenes-de-compra' element={<OrdenesDeCompra />} />
+                <Route path='/ordenes-de-pago' element={<OrdenesDePago />} />
               </Routes>
             </SidebarPersonal>
           )

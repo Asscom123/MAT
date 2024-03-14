@@ -82,6 +82,15 @@
   border-color: #FF912B; /* Cambia el color del borde al pasar el ratón */
 }
 
+.personal .btn-accion {
+  background-color: #1899E2; /* Código de color para naranja */
+  color: #fff; /* Color del texto */
+}
+.personal .btn-accion:hover {
+  background-color: #1899E2; /* Cambia el color al pasar el ratón */
+  border-color: #1899E2; /* Cambia el color del borde al pasar el ratón */
+}
+
 .personal .container .btn-custom {
   background-color: #158F69;
   border-color: #158F69;

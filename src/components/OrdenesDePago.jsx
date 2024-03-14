@@ -6,17 +6,17 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint} from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
-class Tareas extends Component {
+class OrdenesDePago extends Component {
   constructor(props) {
     super(props);
     this.state = {
       originalData: [
-        { id: 1, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        {id: 2, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 3, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 4, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 5, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 6, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
+        { id: 1, name: '456', age: '73865900' , m: '14-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        {id: 2, name: '457', age: '977865900' , m: '13-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 3, name: '468', age: '986580001', m: '12-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 4, name: '469', age: '0055347' , m: '11-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 5, name: '470', age: '4365009' , m: '09-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 6, name: '471', age: '335665600' , m: '08-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
       ],
       data: [],
       searchTerm: '',
@@ -36,13 +36,26 @@ class Tareas extends Component {
       age:'',
       m:'',
       s:'',
+      docEnCarpeta: false,
+     pedido: false,
+     PRONE: false,
+     Cotizacion: false,
+     Contrato: false,
       tipoModal:''
     }
   }
   modalInsertar = () =>{
     this.setState({modalInsertar: !this.state.modalInsertar});
   }
-
+  handleChangeCheckModal = (event) => {
+    const { name, checked } = event.target;
+    this.setState(prevState => ({
+        form: {
+            ...prevState.form,
+            [name]: checked
+        }
+    }));
+}
   headleChangeModal = async e => {
     e.persist ();
     await this.setState({
@@ -126,6 +139,11 @@ class Tareas extends Component {
     // Please sync "Dashboard" to the project
   };
 
+  convertirFormatoFecha(fecha) {
+    const partes = fecha.split('-');
+    return `${partes[2]}-${partes[1]}-${partes[0]}`;
+  }
+
   render() {
     const { data, searchTerm, currentPage, itemsPerPage, currentDate , form} = this.state;
 
@@ -152,10 +170,10 @@ class Tareas extends Component {
         <br/>    
 
         <div className="container">
-          <h1>Tareas Asignadas Pendientes</h1> 
+          <h1>Ordenes de pago</h1> 
           <br/>
           <button className="btn btn-success" onClick={()=> {this.setState ({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar +</button> 
-          <button className="btn btn-print" onClick={()=>{}}><FontAwesomeIcon icon={faPrint}/></button>{"   "}
+          
           <br/>
           <br/>
           <input
@@ -169,11 +187,11 @@ class Tareas extends Component {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Fecha Inical</th>
-                <th>Fecha Limite</th>
-                <th>Descripcion</th>
-                <th>Prioridad</th>
-                <th>Status</th>
+                <th>N° Orden</th>
+                <th>N° Factura</th>
+                <th>Fecha</th>
+                <th>Mayorista</th>
+                <th>Ejecutivo</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -188,6 +206,7 @@ class Tareas extends Component {
                   <td>{item.p}</td>
                   <td>
                   <button className="btn btn-orange" onClick={()=>{this.seleccionar(item); this.modalInsertar()}}><FontAwesomeIcon icon={faPenToSquare}/></button>{"   "}
+                  <button className="btn btn-accion" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faPrint}/></button>
                   </td>
                 </tr>
               ))}
@@ -196,42 +215,65 @@ class Tareas extends Component {
 
           <Modal isOpen={this.state.modalInsertar}>
                 <div class="modal-header">
-                  <h5 class="modal-title">Tarea</h5>
+                  <h5 class="modal-title">Orden de compra</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>this.modalInsertar()}></button>
                 </div>
                 <ModalBody>
                   <div className="form-group">
-                  <label htmlFor="nombre">Empresa</label>
+                  <label htmlFor="nombre">N° de Orden</label>
+                    <input className="form-control" type="text" name="n-orden" id="n-orden" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="fecha">Fecha</label>
+                    <input className="form-control" type="date" name="fecha" id="fecha" onChange={this.handleChangeModal} value={form ? form.fecha : ''} />
+                    <br />
+                    <div className="form-group">
+                        <label>Checklist</label>
+                        <div className="form-check">
+                            <input className="form-check-input" type="checkbox" id="docEnCarpeta" name="docEnCarpeta" onChange={this.handleChangeCheckModal} checked={form ? form.docEnCarpeta : false} />
+                            <label className="form-check-label" htmlFor="docEnCarpeta">Doc en Carpeta VE</label>
+                        </div>
+                        <div className="form-check">
+                                <input className="form-check-input" type="checkbox" id="pedido" name="pedido" onChange={this.handleChangeCheckModal} checked={form ? form.pedido : false} />
+                                <label className="form-check-label" htmlFor="pedido">Pedido / Factura May</label>
+                        </div>
+                        <div className="form-check">
+                                <input className="form-check-input" type="checkbox" id="PRONE" name="PRONE" onChange={this.handleChangeCheckModal} checked={form ? form.PRONE : false} />
+                                <label className="form-check-label" htmlFor="PRONE">PRONE</label>
+                        </div>
+                        <div className="form-check">
+                                <input className="form-check-input" type="checkbox" id="Cotizacion" name="Cotizacion" onChange={this.handleChangeCheckModal} checked={form ? form.Cotizacion : false} />
+                                <label className="form-check-label" htmlFor="Cotizacion">Cotización</label>
+                        </div>
+                        <div className="form-check">
+                                <input className="form-check-input" type="checkbox" id="Contrato" name="Contrato" onChange={this.handleChangeCheckModal} checked={form ? form.Contrato : false} />
+                                <label className="form-check-label" htmlFor="Contrato">Pedido / Contrato / Autorización / Pago</label>
+                        </div>
+                    </div>
+                    <label htmlFor="nombre">Ejecutivo</label>
                     <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
                     <br />
-                    <label htmlFor="nombre">Cargo</label>
-                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
-                    <br />
-                    <label htmlFor="nombre">Personal</label>
-                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
-                    <br />
-                    <label htmlFor="nombre">Fecha inicial</label>
-                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
-                    <br />
-                    <label htmlFor="equipo">Fecha limite</label>
+                    <label htmlFor="equipo">Contacto de pago</label>
                     <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
                     <br />
-                    <label htmlFor="horaUso"> Descripción de la tarea</label>
+                    <label htmlFor="horaUso">Correo</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br /> 
-                    <label htmlFor="horaUso">Acciones</label>
+                    <label htmlFor="horaUso">Número de pedido</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br />
-                    <label htmlFor="horaUso">Personal de apoyo</label>
+                    <label htmlFor="horaUso">N° cliente</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br />
-                    <label htmlFor="horaUso">Observaciones</label>
+                    <label htmlFor="horaUso">Datos Bancarios</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br />
-                    <label htmlFor="horaUso">Potencial $</label>
+                    <label htmlFor="horaUso">Cliente Final</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br />
-                    <label htmlFor="nombreEntre">Plazo</label>
+                    <label htmlFor="horaUso">Nº Factura</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    {/* <label htmlFor="nombreEntre">Plazo</label>
                     <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
                       <option value="">Selecciona</option>
                       <option value="Activo">CP</option>
@@ -258,12 +300,13 @@ class Tareas extends Component {
                     <br />
                     <label htmlFor="horaUso">Fecha final</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
+                    <br /> */}
 
 
                     
                     <br />
                   </div>
+                  
                 </ModalBody>
 
                 <ModalFooter>
@@ -312,4 +355,4 @@ class Tareas extends Component {
   }
 }
 
-export default Tareas;
+export default OrdenesDePago;
