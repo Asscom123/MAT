@@ -52,15 +52,15 @@ const suppliers = getData.sequelizeClient.define(
             allowNull: true,
         },
         diasCred: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true,
         },
         diasPP: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true,
         },
         PP: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: true,
         },
         telefono: {

@@ -30,36 +30,61 @@ const supplier_create = async(req, res) => {
             telefono,
         } = req.body;
 
-        if (!mayorista || !asesor || !banco) {
-            return res.status(400).json({ error: 'Los campos "mayorista", "asesor" y "banco" son obligatorios' });
+        // Validaciones
+        if (!mayorista) {
+            return res.status(400).json({ error: 'El campo "mayorista" es obligatorio y no puede quedar vacío.' });
         }
 
-        if (!/^\d{10}$/.test(telefono) && telefono !== '') {
-            return res.status(400).json({ error: 'El número de teléfono debe contener exactamente 10 dígitos o estar vacío' });
+        if (!RFC) {
+            return res.status(400).json({ error: 'El campo "RFC" es obligatorio y no puede quedar vacío.' });
         }
 
-        if (!/^\d+$/.test(cuenta) && cuenta !== '') {
-            return res.status(400).json({ error: 'El campo "cuenta" debe contener solo dígitos numéricos o estar vacío' });
+        if (!/^[A-ZÑ&]{3,4}\d{6}[A-V1-9][A-Z1-9]\d$/.test(RFC)) {
+            return res.status(400).json({ error: 'El RFC ingresado no es válido. Por favor, ingrese un RFC válido.' });
         }
 
-        if (!/^\d+$/.test(clabe) && clabe !== '') {
-            return res.status(400).json({ error: 'El campo "clabe" debe contener solo dígitos numéricos o estar vacío' });
+        if (!banco) {
+            return res.status(400).json({ error: 'El campo "banco" es obligatorio y no puede quedar vacío.' });
+        }
+
+        if (!/^\d+$/.test(diasCred)) {
+            return res.status(400).json({ error: 'El campo "diasCred" debe contener solo dígitos numéricos y si no tiene entonces poner un 0.' });
+        }
+
+        if (!/^\d+$/.test(diasPP)) {
+            return res.status(400).json({ error: 'El campo "diasPP" debe contener solo dígitos numéricos y si no tiene entonces poner un 0.' });
         }
 
         if (!/^\d+$/.test(PP)) {
-            return res.status(400).json({ error: 'El campo "PP" debe contener solo dígitos numéricos' });
+            return res.status(400).json({ error: 'El campo "PP" debe contener solo dígitos numéricos y si no tiene entonces poner un 0.' });
         }
 
-        if (!/^\d+$/.test(diasCred) && diasCred !== '') {
-            return res.status(400).json({ error: 'El campo "diasCred" debe contener solo dígitos numéricos' });
+        if (!/^(\d{10})?$/.test(telefono)) {
+            return res.status(400).json({ error: 'El campo "telefono" debe contener 10 dígitos o estar vacío.' });
         }
 
-        if (!/^\d+$/.test(diasPP) && diasPP !== '') {
-            return res.status(400).json({ error: 'El campo "diasPP" debe contener solo dígitos numéricos' });
+        if (cuenta !== '' && !/^\d+$/.test(cuenta)) {
+            return res.status(400).json({ error: 'El campo "cuenta" debe contener solo dígitos numéricos o estar vacío.' });
         }
 
-        if (correo !== '' && !isValidEmail(correo)) {
+        if (clabe !== '' && !/^\d+$/.test(clabe)) {
+            return res.status(400).json({ error: 'El campo "clabe" debe contener solo dígitos numéricos o estar vacío.' });
+        }
+
+        const isValidEmail = (email) => {
+            // Expresión regular para validar el formato del correo electrónico
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        };
+
+        // Validar formato de correo electrónico
+        if (!isValidEmail(correo)) {
             return res.status(400).json({ error: 'El correo electrónico ingresado no es válido. Por favor, ingrese un correo electrónico válido.' });
+        }
+
+        const existingSupplier = await getSuppliers.findOne({ where: { correo } });
+        if (existingSupplier) {
+            return res.status(400).json({ error: 'El correo electrónico ya está registrado.' });
         }
 
         await getSuppliers.create({
@@ -68,7 +93,7 @@ const supplier_create = async(req, res) => {
             contactoDePago,
             RFC,
             numCliente,
-            correo: correo || null, // Permitir que el correo sea nulo o vacío
+            correo,
             banco,
             cuenta,
             clabe,
@@ -76,24 +101,14 @@ const supplier_create = async(req, res) => {
             diasPP,
             PP,
             telefono,
-        }, { fields: ["id", "mayorista", "asesor", "contactoDePago", "RFC", "numCliente", "correo", "banco", "cuenta", "clabe", "diasCred", "diasPP", "PP", "telefono"] });
+        });
 
         res.json({ success: true, message: 'Proveedor creado exitosamente' });
     } catch (error) {
-        if (error.name === 'SequelizeUniqueConstraintError') {
-            return res.status(400).json({ error: 'El correo electrónico ya está registrado.' });
-        }
         console.error('Error al crear proveedor:', error);
         res.status(500).json({ error: 'Error Interno del Servidor' });
     }
 };
-
-function isValidEmail(email) {
-    // Expresión regular para validar el formato del correo electrónico
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
 
 
 const supplier_update = async(req, res) => {
@@ -115,35 +130,55 @@ const supplier_update = async(req, res) => {
             telefono,
         } = req.body;
 
-        if (!mayorista || !asesor || !banco) {
-            return res.status(400).json({ error: 'Los campos "mayorista", "asesor" y "banco" son obligatorios' });
+        // Validaciones
+        if (!mayorista) {
+            return res.status(400).json({ error: 'El campo "mayorista" es obligatorio y no puede quedar vacío.' });
         }
 
-        if (!/^\d{10}$/.test(telefono) && telefono !== '') {
-            return res.status(400).json({ error: 'El número de teléfono debe contener exactamente 10 dígitos o estar vacío' });
+        if (!RFC) {
+            return res.status(400).json({ error: 'El campo "RFC" es obligatorio y no puede quedar vacío.' });
         }
 
-        if (!/^\d+$/.test(cuenta) && cuenta !== '') {
-            return res.status(400).json({ error: 'El campo "cuenta" debe contener solo dígitos numéricos o estar vacío' });
+        if (!/^[A-ZÑ&]{3,4}\d{6}[A-V1-9][A-Z1-9]\d$/.test(RFC)) {
+            return res.status(400).json({ error: 'El RFC ingresado no es válido. Por favor, ingrese un RFC válido.' });
         }
 
-        if (!/^\d+$/.test(clabe) && clabe !== '') {
-            return res.status(400).json({ error: 'El campo "clabe" debe contener solo dígitos numéricos o estar vacío' });
+        if (!banco) {
+            return res.status(400).json({ error: 'El campo "banco" es obligatorio y no puede quedar vacío.' });
         }
 
-        if (!/^\d+$/.test(PP) && PP !== '') {
-            return res.status(400).json({ error: 'El campo "PP" debe contener solo dígitos numérico' });
+        if (!/^\d+$/.test(diasCred)) {
+            return res.status(400).json({ error: 'El campo "diasCred" debe contener solo dígitos numéricos.' });
         }
 
-        if (!/^\d+$/.test(diasCred) && diasCred !== '') {
-            return res.status(400).json({ error: 'El campo "diasCred" debe contener solo dígitos numéricos' });
+        if (!/^\d+$/.test(diasPP)) {
+            return res.status(400).json({ error: 'El campo "diasPP" debe contener solo dígitos numéricos.' });
         }
 
-        if (!/^\d+$/.test(diasPP) && diasPP !== '') {
-            return res.status(400).json({ error: 'El campo "diasPP" debe contener solo dígitos numéricos' });
+        if (!/^\d+$/.test(PP)) {
+            return res.status(400).json({ error: 'El campo "PP" debe contener solo dígitos numéricos.' });
         }
 
-        if (correo !== '' && correo !== null && !isValidEmail(correo)) {
+        if (!/^(\d{10})?$/.test(telefono)) {
+            return res.status(400).json({ error: 'El campo "telefono" debe contener 10 dígitos o estar vacío.' });
+        }
+
+        if (cuenta !== '' && !/^\d+$/.test(cuenta)) {
+            return res.status(400).json({ error: 'El campo "cuenta" debe contener solo dígitos numéricos o estar vacío.' });
+        }
+
+        if (clabe !== '' && !/^\d+$/.test(clabe)) {
+            return res.status(400).json({ error: 'El campo "clabe" debe contener solo dígitos numéricos o estar vacío.' });
+        }
+
+        const isValidEmail = (email) => {
+            // Expresión regular para validar el formato del correo electrónico
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        };
+
+        // Validar formato de correo electrónico
+        if (correo !== '' && !isValidEmail(correo)) {
             return res.status(400).json({ error: 'El correo electrónico ingresado no es válido. Por favor, ingrese un correo electrónico válido.' });
         }
 
@@ -158,7 +193,7 @@ const supplier_update = async(req, res) => {
             contactoDePago,
             RFC,
             numCliente,
-            correo: correo || null, // Permitir que el correo sea nulo o vacío
+            correo,
             banco,
             cuenta,
             clabe,
@@ -174,6 +209,12 @@ const supplier_update = async(req, res) => {
         res.status(500).json({ error: 'Error Interno del Servidor' });
     }
 };
+
+
+
+
+
+
 
 
 
