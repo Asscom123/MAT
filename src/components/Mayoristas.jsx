@@ -6,17 +6,17 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint} from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
-class OrdenesDeCompra extends Component {
+class Mayoristas extends Component {
   constructor(props) {
     super(props);
     this.state = {
       originalData: [
-        { id: 1, name: '456', age: '73865900' , m: '14-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        {id: 2, name: '457', age: '977865900' , m: '13-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 3, name: '468', age: '986580001', m: '12-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 4, name: '469', age: '0055347' , m: '11-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 5, name: '470', age: '4365009' , m: '09-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 6, name: '471', age: '335665600' , m: '08-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 1, name: 'COMERCIALIZADORA DE VALOR AGREGADO SA DE CV', age: 'CVA-990426-6T9' , m: '14-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        {id: 2, name: 'INGRAM MICRO MEXICO SA DE CV', age: 'IMM-930401-6Z4' , m: '13-03-2023', s:'IMM-930401-6Z4', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 3, name: 'GDL TELECOMUNICACIONES S.A. DE C.V', age: 'GTE-090128-F60', m: '12-03-2023', s:'GTE-090128-F60', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 4, name: 'PROFUCOM DE MEXICO SA DE CV', age: 'PME-000203-TE3' , m: '11-03-2023', s:'PME-000203-TE3', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 5, name: 'SISTEMAS INTEGRALES DE AUTOMATIZACION S.A. DE C.V.', age: 'SIA-930401-KB0' , m: '09-03-2023', s:'SIA-930401-KB0', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 6, name: 'GRUPO DICE, SA DE CV. VH', age: 'GDI-880315-IYA' , m: '08-03-2023', s:'GDI-880315-IYA', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
       ],
       data: [],
       searchTerm: '',
@@ -157,7 +157,7 @@ class OrdenesDeCompra extends Component {
         <br/>    
 
         <div className="container">
-          <h1>Ordenes de compra</h1> 
+          <h1>Mayoristas</h1> 
           <br/>
           <button className="btn btn-success" onClick={()=> {this.setState ({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar +</button> 
           
@@ -173,27 +173,29 @@ class OrdenesDeCompra extends Component {
           <table className="table table-striped  bg-info">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>N° Orden</th>
-                <th>N° Factura</th>
-                <th>Fecha</th>
+                {/* <th>ID</th> */}
+                <th>Nombre</th>
+                <th>RFC</th>
+                {/* <th>Correo</th>
                 <th>Mayorista</th>
-                <th>Ejecutivo</th>
+                <th>Teléfono</th>
+                <th>Creador</th> */}
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((item, index) => (
                 <tr key={item.id}>
-                  <td>{item.id}</td>
+                  {/* <td>{item.id}</td> */}
                   <td>{item.name}</td>
                   <td>{item.age}</td>
-                  <td>{item.m}</td>
+                  {/* <td>{item.m}</td>
                   <td>{item.s}</td>
                   <td>{item.p}</td>
+                  <td>{item.a}</td> */}
                   <td>
                   <button className="btn btn-orange" onClick={()=>{this.seleccionar(item); this.modalInsertar()}}><FontAwesomeIcon icon={faPenToSquare}/></button>{"   "}
-                  <button className="btn btn-accion" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faPrint}/></button>
+                  <button className="btn btn-danger" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faTrash}/></button>
                   </td>
                 </tr>
               ))}
@@ -202,74 +204,55 @@ class OrdenesDeCompra extends Component {
 
           <Modal isOpen={this.state.modalInsertar}>
                 <div class="modal-header">
-                  <h5 class="modal-title">Orden de compra</h5>
+                  <h5 class="modal-title">Mayorista</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>this.modalInsertar()}></button>
                 </div>
                 <ModalBody>
                   <div className="form-group">
-                  <label htmlFor="nombre">N° de Orden</label>
+                  <label htmlFor="nombre">Nombre</label>
                     <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
                     <br />
-                    <label htmlFor="fecha">Fecha</label>
-                    <input className="form-control" type="date" name="fecha" id="fecha" onChange={this.handleChangeModal} value={form ? form.fecha : ''} />
+                    <label htmlFor="fecha">Ejecutivo</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form ? form.fecha : ''} />
                     <br />
-                    <label htmlFor="nombre">Mayorista</label>
+                    <label htmlFor="nombre">Contacto de pago</label>
                     <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
                     <br />
-                    <label htmlFor="nombre">Ejecutivo</label>
+                    <label htmlFor="nombre">RFC</label>
                     <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
                     <br />
-                    <label htmlFor="equipo">Contacto de pago</label>
+                    <label htmlFor="equipo">Cliente</label>
                     <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
                     <br />
                     <label htmlFor="horaUso">Correo</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br /> 
-                    <label htmlFor="horaUso">Número de pedido</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">N° cliente</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Datos Bancarios</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Cliente Final</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Nº Factura</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    {/* <label htmlFor="nombreEntre">Plazo</label>
+                    <label htmlFor="nombreEntre">Banco</label>
                     <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
                       <option value="">Selecciona</option>
-                      <option value="Activo">CP</option>
-                      <option value="Inactivo">MP</option>
-                      <option value="Inactivo">LP</option>
+                      <option value="Activo">Banco1</option>
+                      <option value="Inactivo">Banco2</option>
+                      <option value="Inactivo">Banco3</option>
                     </select>
-                    <br />
-                    <label htmlFor="nombreEntre">Prioridad</label>
-                    <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
-                      <option value="">Selecciona</option>
-                      <option value="Activo">UI</option>
-                      <option value="Inactivo">NUI</option>
-                      <option value="Inactivo">NIU</option>
-                      <option value="Inactivo">NINU</option>
-                    </select>
-                    <br />
-                    <label htmlFor="nombreEntre">Status</label>
-                    <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
-                      <option value="">Selecciona</option>
-                      <option value="Activo">Por iniciar</option>
-                      <option value="Inactivo">En Proceso</option>
-                      <option value="Inactivo">Finalizado</option>
-                    </select>
-                    <br />
-                    <label htmlFor="horaUso">Fecha final</label>
+                    <br /> 
+                    <label htmlFor="horaUso">Número de cuenta</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br /> */}
-
-
+                    <br />
+                    <label htmlFor="horaUso">Clave bancaria</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Convenio CIE</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Días de crédito</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Días de pronto pago</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Teléfono</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
                     
                     <br />
                   </div>
@@ -322,4 +305,4 @@ class OrdenesDeCompra extends Component {
   }
 }
 
-export default OrdenesDeCompra;
+export default Mayoristas;

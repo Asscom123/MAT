@@ -6,17 +6,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint} from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
-class Tareas extends Component {
+class Clientes extends Component {
   constructor(props) {
     super(props);
     this.state = {
       originalData: [
-        { id: 1, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        {id: 2, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 3, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 4, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 5, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
-        { id: 6, name: '07/03/2024', age: '08/03/2024' , m: 'Reporte de utilidades', s:'UI', p:'En proceso'},
+        { id: 1, name: 'MUNICIPIO DE TUXTLA GUTIÉRREZ', age: 'Carlos Orsoe Morales Vázquez' , m: '14-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        
       ],
       data: [],
       searchTerm: '',
@@ -126,6 +122,11 @@ class Tareas extends Component {
     // Please sync "Dashboard" to the project
   };
 
+  convertirFormatoFecha(fecha) {
+    const partes = fecha.split('-');
+    return `${partes[2]}-${partes[1]}-${partes[0]}`;
+  }
+
   render() {
     const { data, searchTerm, currentPage, itemsPerPage, currentDate , form} = this.state;
 
@@ -152,10 +153,10 @@ class Tareas extends Component {
         <br/>    
 
         <div className="container">
-          <h1>Tareas Asignadas Pendientes</h1> 
+          <h1>Clientes</h1> 
           <br/>
           <button className="btn btn-success" onClick={()=> {this.setState ({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar +</button> 
-          <button className="btn btn-print" onClick={()=>{}}><FontAwesomeIcon icon={faPrint}/></button>{"   "}
+          
           <br/>
           <br/>
           <input
@@ -169,11 +170,12 @@ class Tareas extends Component {
             <thead>
               <tr>
                 {/* <th>ID</th> */}
-                <th>Fecha Inical</th>
-                <th>Fecha Limite</th>
-                <th>Descripcion</th>
-                <th>Prioridad</th>
-                <th>Status</th>
+                <th>Cliente</th>
+                <th>Titular</th>
+                {/* <th>Correo</th>
+                <th>Mayorista</th>
+                <th>Teléfono</th>
+                <th>Creador</th> */}
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -183,11 +185,14 @@ class Tareas extends Component {
                   {/* <td>{item.id}</td> */}
                   <td>{item.name}</td>
                   <td>{item.age}</td>
-                  <td>{item.m}</td>
+                  {/* <td>{item.m}</td>
                   <td>{item.s}</td>
                   <td>{item.p}</td>
+                  <td>{item.a}</td> */}
                   <td>
                   <button className="btn btn-orange" onClick={()=>{this.seleccionar(item); this.modalInsertar()}}><FontAwesomeIcon icon={faPenToSquare}/></button>{"   "}
+                  <button className="btn btn-danger" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faTrash}/></button>
+                  
                   </td>
                 </tr>
               ))}
@@ -196,74 +201,46 @@ class Tareas extends Component {
 
           <Modal isOpen={this.state.modalInsertar}>
                 <div class="modal-header">
-                  <h5 class="modal-title">Tarea</h5>
+                  <h5 class="modal-title">Cliente</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>this.modalInsertar()}></button>
                 </div>
                 <ModalBody>
                   <div className="form-group">
-                  <label htmlFor="nombre">Empresa</label>
-                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''} />
+                  <label htmlFor="nombre">Cliente</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="fecha">Titular</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form ? form.fecha : ''} />
                     <br />
                     <label htmlFor="nombre">Cargo</label>
                     <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
                     <br />
-                    <label htmlFor="nombre">Personal</label>
+                    <label htmlFor="nombre">Contacto 1</label>
                     <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
                     <br />
-                    <label htmlFor="nombre">Fecha inicial</label>
-                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
-                    <br />
-                    <label htmlFor="equipo">Fecha limite</label>
+                    <label htmlFor="equipo">Puesto</label>
                     <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
                     <br />
-                    <label htmlFor="horaUso"> Descripción de la tarea</label>
+                    <label htmlFor="horaUso">Correo</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Teléfono</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Contacto 2</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br /> 
-                    <label htmlFor="horaUso">Acciones</label>
+                    <label htmlFor="equipo">Puesto</label>
+                    <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
+                    <br /> 
+                    <label htmlFor="horaUso">Correo</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
                     <br />
-                    <label htmlFor="horaUso">Personal de apoyo</label>
+                    <label htmlFor="horaUso">Teléfono</label>
                     <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Observaciones</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Potencial $</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="nombreEntre">Plazo</label>
-                    <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
-                      <option value="">Selecciona</option>
-                      <option value="Activo">CP</option>
-                      <option value="Inactivo">MP</option>
-                      <option value="Inactivo">LP</option>
-                    </select>
-                    <br />
-                    <label htmlFor="nombreEntre">Prioridad</label>
-                    <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
-                      <option value="">Selecciona</option>
-                      <option value="Activo">UI</option>
-                      <option value="Inactivo">NUI</option>
-                      <option value="Inactivo">NIU</option>
-                      <option value="Inactivo">NINU</option>
-                    </select>
-                    <br />
-                    <label htmlFor="nombreEntre">Status</label>
-                    <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
-                      <option value="">Selecciona</option>
-                      <option value="Activo">Por iniciar</option>
-                      <option value="Inactivo">En Proceso</option>
-                      <option value="Inactivo">Finalizado</option>
-                    </select>
-                    <br />
-                    <label htmlFor="horaUso">Fecha final</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-
-
-                    
                     <br />
                   </div>
+                  
                 </ModalBody>
 
                 <ModalFooter>
@@ -312,4 +289,4 @@ class Tareas extends Component {
   }
 }
 
-export default Tareas;
+export default Clientes;

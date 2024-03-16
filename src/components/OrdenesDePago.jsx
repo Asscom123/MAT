@@ -3,6 +3,7 @@ import './Tareas.css';
 import Logo from '../assets/Logo.png'
 import Alarm from '../assets/alarm.png'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { FaRegFilePdf } from "react-icons/fa";
 import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint} from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
@@ -11,13 +12,18 @@ class OrdenesDePago extends Component {
     super(props);
     this.state = {
       originalData: [
-        { id: 1, name: '456', age: '73865900' , m: '14-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        {id: 2, name: '457', age: '977865900' , m: '13-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 3, name: '468', age: '986580001', m: '12-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 4, name: '469', age: '0055347' , m: '11-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 5, name: '470', age: '4365009' , m: '09-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        { id: 6, name: '471', age: '335665600' , m: '08-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
+        { id: 1, name: '456', age: '73865900' , m: '14-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'Juan Alvarez', pdf: <FaRegFilePdf />},
+        {id: 2, name: '457', age: '977865900' , m: '13-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'Luis Ferrera'},
+        { id: 3, name: '468', age: '986580001', m: '12-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'Luis Ferrera'},
+        { id: 4, name: '469', age: '0055347' , m: '11-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'Juan Alvarez'},
+        { id: 5, name: '470', age: '4365009' , m: '09-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'Luis Ferrera'},
+        { id: 6, name: '471', age: '335665600' , m: '08-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'Juan Alvarez'},
       ],
+      datosTabla: [
+        { id: 1, nombre: 'Laptop HP', clienteF: 'Alfredo',cantidad:'1', descripcion: 'Core i5', precio:'9500' },
+        { id: 2, nombre: 'Monitor HP', clienteF: 'Luis',cantidad:'2', descripcion: '24 pulgadas', precio:'3500' }
+      ],
+      nuevoDato: { id: '', nombre: '', clienteF: '',cantidad:'', descripcion: '', precio:''  },
       data: [],
       searchTerm: '',
       currentPage: 1,
@@ -41,11 +47,19 @@ class OrdenesDePago extends Component {
      PRONE: false,
      Cotizacion: false,
      Contrato: false,
+     selectedFile: null,
       tipoModal:''
     }
   }
+
+  
   modalInsertar = () =>{
     this.setState({modalInsertar: !this.state.modalInsertar});
+  }
+  handleChangePDF = (event) => {
+    this.setState({
+      selectedFile: event.target.files[0]
+    });
   }
   handleChangeCheckModal = (event) => {
     const { name, checked } = event.target;
@@ -139,10 +153,49 @@ class OrdenesDePago extends Component {
     // Please sync "Dashboard" to the project
   };
 
+  modalSiguiente = () => {
+    this.setState({ modalSiguiente: true });
+  };
+  
+  // Método para ocultar el segundo modal
+  cerrarModalSiguiente = () => {
+    this.setState({ modalSiguiente: false });
+  };
+
   convertirFormatoFecha(fecha) {
     const partes = fecha.split('-');
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
   }
+
+  toggleModalSiguiente = () => {
+    this.setState(prevState => ({
+      modalSiguiente: !prevState.modalSiguiente
+    }));
+  };
+
+  // Función para agregar una fila a la tabla
+  agregarFila = () => {
+    const { datosTabla, nuevoDato } = this.state;
+    const newData = [...datosTabla, nuevoDato];
+    this.setState({ datosTabla: newData });
+  };
+
+  // Función para eliminar una fila de la tabla
+  eliminarFila = id => {
+    const newData = this.state.datosTabla.filter(item => item.id !== id);
+    this.setState({ datosTabla: newData });
+  };
+
+  // Función para manejar cambios en los inputs de la nueva fila
+  handleChangeNuevoDato = e => {
+    const { name, value } = e.target;
+    this.setState(prevState => ({
+      nuevoDato: {
+        ...prevState.nuevoDato,
+        [name]: value
+      }
+    }));
+  };
 
   render() {
     const { data, searchTerm, currentPage, itemsPerPage, currentDate , form} = this.state;
@@ -152,6 +205,8 @@ class OrdenesDePago extends Component {
     const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
     const totalPages = Math.ceil(data.length / itemsPerPage);
+
+    const { modalSiguiente, datosTabla, nuevoDato } = this.state;
 
     return (
       <div className="personal">
@@ -170,7 +225,7 @@ class OrdenesDePago extends Component {
         <br/>    
 
         <div className="container">
-          <h1>Ordenes de pago</h1> 
+          <h1>Orden de pago</h1> 
           <br/>
           <button className="btn btn-success" onClick={()=> {this.setState ({form: null, tipoModal: 'insertar'}); this.modalInsertar()}}>Agregar +</button> 
           
@@ -186,24 +241,26 @@ class OrdenesDePago extends Component {
           <table className="table table-striped  bg-info">
             <thead>
               <tr>
-                <th>ID</th>
+                {/* <th>ID</th> */}
                 <th>N° Orden</th>
                 <th>N° Factura</th>
                 <th>Fecha</th>
                 <th>Mayorista</th>
-                <th>Ejecutivo</th>
+                <th>Ejecutivo Asscom</th>
+                <th>Factura</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((item, index) => (
                 <tr key={item.id}>
-                  <td>{item.id}</td>
+                  {/* <td>{item.id}</td> */}
                   <td>{item.name}</td>
                   <td>{item.age}</td>
                   <td>{item.m}</td>
                   <td>{item.s}</td>
                   <td>{item.p}</td>
+                  <td>{item.pdf}</td>
                   <td>
                   <button className="btn btn-orange" onClick={()=>{this.seleccionar(item); this.modalInsertar()}}><FontAwesomeIcon icon={faPenToSquare}/></button>{"   "}
                   <button className="btn btn-accion" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faPrint}/></button>
@@ -220,91 +277,36 @@ class OrdenesDePago extends Component {
                 </div>
                 <ModalBody>
                   <div className="form-group">
-                  <label htmlFor="nombre">N° de Orden</label>
-                    <input className="form-control" type="text" name="n-orden" id="n-orden" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
-                    <br />
-                    <label htmlFor="fecha">Fecha</label>
-                    <input className="form-control" type="date" name="fecha" id="fecha" onChange={this.handleChangeModal} value={form ? form.fecha : ''} />
-                    <br />
-                    <div className="form-group">
-                        <label>Checklist</label>
-                        <div className="form-check">
-                            <input className="form-check-input" type="checkbox" id="docEnCarpeta" name="docEnCarpeta" onChange={this.handleChangeCheckModal} checked={form ? form.docEnCarpeta : false} />
-                            <label className="form-check-label" htmlFor="docEnCarpeta">Doc en Carpeta VE</label>
-                        </div>
-                        <div className="form-check">
-                                <input className="form-check-input" type="checkbox" id="pedido" name="pedido" onChange={this.handleChangeCheckModal} checked={form ? form.pedido : false} />
-                                <label className="form-check-label" htmlFor="pedido">Pedido / Factura May</label>
-                        </div>
-                        <div className="form-check">
-                                <input className="form-check-input" type="checkbox" id="PRONE" name="PRONE" onChange={this.handleChangeCheckModal} checked={form ? form.PRONE : false} />
-                                <label className="form-check-label" htmlFor="PRONE">PRONE</label>
-                        </div>
-                        <div className="form-check">
-                                <input className="form-check-input" type="checkbox" id="Cotizacion" name="Cotizacion" onChange={this.handleChangeCheckModal} checked={form ? form.Cotizacion : false} />
-                                <label className="form-check-label" htmlFor="Cotizacion">Cotización</label>
-                        </div>
-                        <div className="form-check">
-                                <input className="form-check-input" type="checkbox" id="Contrato" name="Contrato" onChange={this.handleChangeCheckModal} checked={form ? form.Contrato : false} />
-                                <label className="form-check-label" htmlFor="Contrato">Pedido / Contrato / Autorización / Pago</label>
-                        </div>
-                    </div>
-                    <label htmlFor="nombre">Ejecutivo</label>
-                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
-                    <br />
-                    <label htmlFor="equipo">Contacto de pago</label>
-                    <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
-                    <br />
-                    <label htmlFor="horaUso">Correo</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br /> 
-                    <label htmlFor="horaUso">Número de pedido</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">N° cliente</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Datos Bancarios</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Cliente Final</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    <label htmlFor="horaUso">Nº Factura</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br />
-                    {/* <label htmlFor="nombreEntre">Plazo</label>
+                   
+                    <label htmlFor="nombreEntre">Mayorista</label>
                     <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
                       <option value="">Selecciona</option>
-                      <option value="Activo">CP</option>
-                      <option value="Inactivo">MP</option>
-                      <option value="Inactivo">LP</option>
+                      <option value="Activo">Mayorista1</option>
+                      <option value="Inactivo">Mayorista2</option>
+                      <option value="Inactivo">Mayorista3</option>
                     </select>
                     <br />
-                    <label htmlFor="nombreEntre">Prioridad</label>
+                    <label htmlFor="fecha">Número de pedidio</label>
+                    <input className="form-control" type="" name="fecha" id="fecha" onChange={this.handleChangeModal} value={form ? form.fecha : ''} />
+                    <br />
+                    <label htmlFor="nombreEntre">Cliente Final</label>
                     <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
                       <option value="">Selecciona</option>
-                      <option value="Activo">UI</option>
-                      <option value="Inactivo">NUI</option>
-                      <option value="Inactivo">NIU</option>
-                      <option value="Inactivo">NINU</option>
+                      <option value="Activo">Cliente1</option>
+                      <option value="Inactivo">Cliente2</option>
+                      <option value="Inactivo">Cliente3</option>
                     </select>
                     <br />
-                    <label htmlFor="nombreEntre">Status</label>
-                    <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
-                      <option value="">Selecciona</option>
-                      <option value="Activo">Por iniciar</option>
-                      <option value="Inactivo">En Proceso</option>
-                      <option value="Inactivo">Finalizado</option>
-                    </select>
-                    <br />
-                    <label htmlFor="horaUso">Fecha final</label>
-                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
-                    <br /> */}
-
-
+                    <label htmlFor="factura">Nº Factura</label>
+                    <input className="form-control" type="file" name="factura" id="factura" accept=".pdf"onChange={this.handleChangePDF} />
                     
                     <br />
+                    {this.state.selectedFile && (
+                    <div>
+                      <p>Archivo seleccionado: {this.state.selectedFile.name}</p>
+                    </div> )}
+                    <br />
+                   
                   </div>
                   
                 </ModalBody>
@@ -312,7 +314,7 @@ class OrdenesDePago extends Component {
                 <ModalFooter>
                   {this.state.tipoModal=='insertar'?
                   <div class="d-grid gap-12 col-4 mx-auto">
-                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPost()}>Guardar</button>
+                    <button class="btn btn-lg btn-success" type="button" onClick={this.modalSiguiente}>Siguiente</button>
                   </div>:
                   <div class="d-grid gap-12 col-4 mx-auto">
                     <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPut()}>Actualizar</button>
@@ -321,6 +323,68 @@ class OrdenesDePago extends Component {
                     
                 </ModalFooter>
                 </Modal>
+{/* Tabla de la OP */}
+                <Modal className="modal-dialog modal-lg" isOpen={modalSiguiente}>
+              <div class="modal-header">
+                  <h5 class="modal-title">Orden de compra</h5>
+                  <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={this.toggleModalSiguiente}></button>
+                </div>
+                  <div className="modal-body">
+                    <table className="table">
+                      <thead>
+                        <tr>
+                          {/* <th>ID</th> */}
+                          <th>Cotización / Nombre</th>
+                          <th>Cliente final</th>
+                          <th>Cantidad</th>
+                          <th>Descripción del producto</th>
+                          <th>Precio unitario</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {datosTabla.map(item => (
+                          <tr key={item.id}>
+                            {/* <td>{item.id}</td> */}
+                            <td>{item.nombre}</td>
+                            <td>{item.clienteF}</td>
+                            <td>{item.cantidad}</td>
+                            <td>{item.descripcion}</td>
+                            <td>{item.precio}</td>
+                            <td>
+                              <button className="btn btn-danger" onClick={() => this.eliminarFila(item.id)}>Eliminar</button>
+                            </td>
+                          </tr>
+                        ))}
+                        {/* Agregar fila */}
+                        <tr>
+                          {/* <td><input type="text" name="id" className="form-control" value={nuevoDato.id} onChange={this.handleChangeNuevoDato} /></td> */}
+                          <td><input type="text" name="nombre" className="form-control" value={nuevoDato.nombre} onChange={this.handleChangeNuevoDato} /></td>
+                          <td><input type="text" name="clienteF" className="form-control" value={nuevoDato.clienteF} onChange={this.handleChangeNuevoDato} /></td>
+                          <td><input type="text" name="cantidad" className="form-control" value={nuevoDato.cantidad} onChange={this.handleChangeNuevoDato} /></td>
+                          <td><input type="text" name="descripcion" className="form-control" value={nuevoDato.descripcion} onChange={this.handleChangeNuevoDato} /></td>
+                          <td><input type="text" name="precio" className="form-control" value={nuevoDato.precio} onChange={this.handleChangeNuevoDato} /></td>
+                          <td>
+                            <button className="btn btn-success" onClick={this.agregarFila}>Agregar</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                    <label htmlFor="fecha">Flete</label>
+                    <input className="form-control" type="" name="fecha" id="fecha" onChange={this.handleChangeModal} value={form ? form.fecha : ''} />
+                    <br />
+                    <label htmlFor="fecha">Tiempo de entrega</label>
+                    <input className="form-control" type="" name="fecha" id="fecha" onChange={this.handleChangeModal} value={form ? form.fecha : ''} />
+                    <br />
+                  </div>
+                  
+                  <div class="d-grid gap-12 col-4 mx-auto">
+                  <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPost()}>Guardar</button>
+                  </div>
+                  <br/>
+                
+            
+            </Modal>
 
                 <Modal isOpen={this.state.modalEliminar}>
                 <div class="modal-header">

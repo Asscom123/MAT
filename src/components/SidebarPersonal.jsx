@@ -6,6 +6,8 @@ import {CiLogin, CiShoppingBasket} from 'react-icons/ci';
 import {IoIosMenu} from 'react-icons/io';
 import{MdOutlinePayment} from 'react-icons/md';
 import {IoDocumentOutline} from 'react-icons/io5';
+import { MdApartment } from "react-icons/md";
+import { HiOutlineUserGroup } from "react-icons/hi";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import SidebarMenuPersonal from "./SidebarMenuPersonal";
 const routes = [
@@ -15,13 +17,18 @@ const routes = [
     icon: <IoDocumentOutline />,
   },
   {
-    path: "/ordenes-de-compra",
-    name: "Ordenes de Compra",
-    icon: <CiShoppingBasket />,
+    path: "/mayoristas",
+    name: "Mayoristas",
+    icon: <MdApartment />,
+  },
+  {
+    path: "/clientes",
+    name: "Clientes",
+    icon: <HiOutlineUserGroup />,
   },
   {
     path: "/ordenes-de-pago",
-    name: "Ordenes de Pago",
+    name: "Orden de Pago",
     icon: <MdOutlinePayment />,
   },
   
