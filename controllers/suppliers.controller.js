@@ -3,7 +3,7 @@ import { getSuppliers } from "../models/suppliers.model.js";
 const supplier_view = async(req, res) => {
     try {
         const suppliers = await getSuppliers.findAll({
-            attributes: ["id", "mayorista", "asesor", "contactoDePago", "RFC", "numCliente", "correo", "banco", "cuenta", "clabe", "diasCred", "diasPP", "PP", "telefono"]
+            attributes: ["id", "mayorista", "asesor", "contactoDePago", "RFC", "numCliente", "correo", "banco", "cuenta", "clabe", "convenioCIE", "diasCred", "diasPP", "PP", "telefono"]
         });
         res.send(suppliers);
     } catch (error) {
@@ -24,6 +24,7 @@ const supplier_create = async(req, res) => {
             banco,
             cuenta,
             clabe,
+            convenioCIE,
             diasCred,
             diasPP,
             PP,
@@ -97,6 +98,7 @@ const supplier_create = async(req, res) => {
             banco,
             cuenta,
             clabe,
+            convenioCIE,
             diasCred,
             diasPP,
             PP,
@@ -124,6 +126,7 @@ const supplier_update = async(req, res) => {
             banco,
             cuenta,
             clabe,
+            convenioCIE,
             diasCred,
             diasPP,
             PP,
@@ -197,6 +200,7 @@ const supplier_update = async(req, res) => {
             banco,
             cuenta,
             clabe,
+            convenioCIE,
             diasCred,
             diasPP,
             PP,
@@ -209,14 +213,6 @@ const supplier_update = async(req, res) => {
         res.status(500).json({ error: 'Error Interno del Servidor' });
     }
 };
-
-
-
-
-
-
-
-
 
 
 const supplier_delete = async(req, res) => {

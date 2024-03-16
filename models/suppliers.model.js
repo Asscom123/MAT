@@ -51,6 +51,10 @@ const suppliers = getData.sequelizeClient.define(
             type: DataTypes.STRING,
             allowNull: true,
         },
+        convenioCIE: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
         diasCred: {
             type: DataTypes.STRING,
             allowNull: true,
