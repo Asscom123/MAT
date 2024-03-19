@@ -56,6 +56,38 @@ class OrdenesDePago extends Component {
   modalInsertar = () =>{
     this.setState({modalInsertar: !this.state.modalInsertar});
   }
+
+  modalInsertarMayorista = () =>{
+    this.setState({ modalInsertarMayorista: true });
+  }
+
+  // Método para ocultar el segundo modal mayorista
+  cerrarModalMayorista = () => {
+    this.setState({ modalInsertarMayorista: false });
+  };
+
+  toggleModalMayorista = () => {
+    this.setState(prevState => ({
+      modalInsertarMayorista: !prevState.modalInsertarMayorista
+    }));
+  };
+
+
+  modalInsertarCliente = () =>{
+    this.setState({ modalInsertarCliente: true });
+  }
+
+  // Método para ocultar el segundo modal Cliente
+  cerrarModalCliente = () => {
+    this.setState({ modalInsertarCliente: false });
+  };
+
+  toggleModalCliente = () => {
+    this.setState(prevState => ({
+      modalInsertarCliente: !prevState.modalInsertarCliente
+    }));
+  };
+
   handleChangePDF = (event) => {
     this.setState({
       selectedFile: event.target.files[0]
@@ -277,26 +309,35 @@ class OrdenesDePago extends Component {
                 </div>
                 <ModalBody>
                   <div className="form-group">
-                   
-                    <label htmlFor="nombreEntre">Mayorista</label>
+                
+                  <label htmlFor="nombreEntre">Mayorista</label>
+                   <div className="d-flex align-items-center">
                     <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
                       <option value="">Selecciona</option>
                       <option value="Activo">Mayorista1</option>
                       <option value="Inactivo">Mayorista2</option>
                       <option value="Inactivo">Mayorista3</option>
-                    </select>
-                    <br />
+                      </select>
+                      <button type="button" class="btn btn-outline-success" onClick={()=> {this.setState ({form: null, tipoModal: 'insertarMayorista'}); this.modalInsertarMayorista()}}>+</button>
+                   </div>
+              <br/>
+                    
+              
                     <label htmlFor="fecha">Número de pedidio</label>
                     <input className="form-control" type="" name="fecha" id="fecha" onChange={this.handleChangeModal} value={form ? form.fecha : ''} />
                     <br />
                     <label htmlFor="nombreEntre">Cliente Final</label>
+                    <div className="d-flex align-items-center">
                     <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
                       <option value="">Selecciona</option>
                       <option value="Activo">Cliente1</option>
                       <option value="Inactivo">Cliente2</option>
                       <option value="Inactivo">Cliente3</option>
                     </select>
-                    <br />
+                    <button type="button" class="btn btn-outline-success" onClick={()=> {this.setState ({form: null, tipoModal: 'insertarCliente'}); this.modalInsertarCliente()}}>+</button>
+                    </div>
+                    <br/>
+                    
                     <label htmlFor="factura">Nº Factura</label>
                     <input className="form-control" type="file" name="factura" id="factura" accept=".pdf"onChange={this.handleChangePDF} />
                     
@@ -397,6 +438,135 @@ class OrdenesDePago extends Component {
                <ModalFooter>
                 <button className="btn btn-danger" onClick={()=>this.peticionDelete(this.state.form.id)}>Sí</button>
                 <button className="btn btn-success" onClick={()=>this.setState({modalEliminar: false})}>No</button>
+                </ModalFooter>
+                </Modal>
+
+{/* Modal de Mayoristas*/}
+                <Modal isOpen={this.state.modalInsertarMayorista}>
+                <div class="modal-header">
+                  <h5 class="modal-title">Mayorista</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>this.toggleModalMayorista()}></button>
+                </div>
+                <ModalBody>
+                  <div className="form-group">
+                  <label htmlFor="nombre">Nombre</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="fecha">Ejecutivo</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form ? form.fecha : ''} />
+                    <br />
+                    <label htmlFor="nombre">Contacto de pago</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="nombre">RFC</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="equipo">Cliente</label>
+                    <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
+                    <br />
+                    <label htmlFor="horaUso">Correo</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br /> 
+                    <label htmlFor="nombreEntre">Banco</label>
+                    <select className="form-select" name="nombreEntre" id="nombreEntre" onChange={this.headleChangeModal} value={form ? form.nombreEntre : ''}>
+                      <option value="">Selecciona</option>
+                      <option value="Activo">Banco1</option>
+                      <option value="Inactivo">Banco2</option>
+                      <option value="Inactivo">Banco3</option>
+                    </select>
+                    <br /> 
+                    <label htmlFor="horaUso">Número de cuenta</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Clave bancaria</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Convenio CIE</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Días de crédito</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Días de pronto pago</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Teléfono</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    
+                    <br />
+                  </div>
+                  
+                </ModalBody>
+
+                <ModalFooter>
+                  {this.state.tipoModal=='insertarMayorista'?
+                  <div class="d-grid gap-12 col-4 mx-auto">
+                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPost()}>Guardar</button>
+                  </div>:
+                  <div class="d-grid gap-12 col-4 mx-auto">
+                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPut()}>Actualizar</button>
+                  </div>
+                  }
+                    
+                </ModalFooter>
+                </Modal>
+
+{/*Modal de Cliente */}
+                <Modal isOpen={this.state.modalInsertarCliente}>
+                <div class="modal-header">
+                  <h5 class="modal-title">Cliente</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>this.toggleModalCliente()}></button>
+                </div>
+                <ModalBody>
+                  <div className="form-group">
+                  <label htmlFor="nombre">Cliente</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="fecha">Titular</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form ? form.fecha : ''} />
+                    <br />
+                    <label htmlFor="nombre">Cargo</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="nombre">Contacto 1</label>
+                    <input className="form-control" type="text" name="fecha" id="fecha" onChange={this.headleChangeModal} value={form?form.fecha: ''}/>
+                    <br />
+                    <label htmlFor="equipo">Puesto</label>
+                    <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
+                    <br />
+                    <label htmlFor="horaUso">Correo</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Teléfono</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Contacto 2</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br /> 
+                    <label htmlFor="equipo">Puesto</label>
+                    <input className="form-control" type="text" name="equipo" id="equipo" onChange={this.headleChangeModal} value={form?form.equipo: ''}/>
+                    <br /> 
+                    <label htmlFor="horaUso">Correo</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                    <label htmlFor="horaUso">Teléfono</label>
+                    <input className="form-control" type="text" name="horaUso" id="horaUso" onChange={this.headleChangeModal} value={form?form.horaUso:''}/>
+                    <br />
+                  </div>
+                  
+                </ModalBody>
+
+                <ModalFooter>
+                  {this.state.tipoModal=='insertarCliente'?
+                  <div class="d-grid gap-12 col-4 mx-auto">
+                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPost()}>Guardar</button>
+                  </div>:
+                  <div class="d-grid gap-12 col-4 mx-auto">
+                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPut()}>Actualizar</button>
+                  </div>
+                  }
+                    
                 </ModalFooter>
                 </Modal>
 

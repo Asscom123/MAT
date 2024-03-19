@@ -114,6 +114,11 @@
   border-color: #1899E2; /* Cambia el color del borde al pasar el ratón */
 }
 
+.personal .btn-separate {
+  margin-right: 5px; /* Puedes ajustar el valor de este margen según tus preferencias */
+}
+
+
 
 
 

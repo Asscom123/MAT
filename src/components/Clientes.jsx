@@ -3,7 +3,8 @@ import './Tareas.css';
 import Logo from '../assets/Logo.png'
 import Alarm from '../assets/alarm.png'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint} from '@fortawesome/free-solid-svg-icons';
+import { AiFillEye } from "react-icons/ai";
+import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint, faEye} from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 class Clientes extends Component {
@@ -11,14 +12,16 @@ class Clientes extends Component {
     super(props);
     this.state = {
       originalData: [
-        { id: 1, name: 'MUNICIPIO DE TUXTLA GUTIÉRREZ', age: 'Carlos Orsoe Morales Vázquez' , m: '14-03-2023', s:'GRUPO LOMA DEL NORTE S.A DE C.V', p:'DIEGO ALBERTO GIMENEZ FREITEZ'},
-        
+        { id: 1, name: 'MUNICIPIO DE TUXTLA GUTIÉRREZ', age: 'Carlos Orsoe Morales Vázquez' , m: 'Presidente', s:'Juan Carlos Miranda', p:'Compras', c:'compras@gmail.com', t:'9618464900', c2:'Maria Avendaño Pineda', p2:'Contadora', co2:'mariaTuxtla@gmail.com', t2:'9926547083'},
+        { id: 2, name: 'ZOOMAT', age: 'Federico Alvarez del Toro' , m: 'Director General', s:'Alondra Ramos Gómez', p:'Contadora', c:'alondrazommat@gmail.com', t:'9618464900', c2:'Miguel Adrian Ramos', p2:'Contador', co2:'miguelzommattuxtla@gmail.com', t2:'9926547083'},
       ],
       data: [],
       searchTerm: '',
       currentPage: 1,
       itemsPerPage: 5,
-      currentDate: ""
+      currentDate: "",
+      modalView: false,
+      clienteSeleccionado: null
     };
   }
 
@@ -35,6 +38,19 @@ class Clientes extends Component {
       tipoModal:''
     }
   }
+
+
+  seleccionarCliente = (cliente) => {
+    this.setState({ clienteSeleccionado: cliente, modalView: true });
+  };
+
+  
+
+  // Método para cerrar el modal
+  cerrarModal = () => {
+    this.setState({ modalView: false });
+  };
+
   modalInsertar = () =>{
     this.setState({modalInsertar: !this.state.modalInsertar});
   }
@@ -128,11 +144,12 @@ class Clientes extends Component {
   }
 
   render() {
-    const { data, searchTerm, currentPage, itemsPerPage, currentDate , form} = this.state;
+    const { data, searchTerm, currentPage, itemsPerPage, currentDate ,modalView, clienteSeleccionado, form} = this.state;
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+   
 
     const totalPages = Math.ceil(data.length / itemsPerPage);
 
@@ -191,13 +208,101 @@ class Clientes extends Component {
                   <td>{item.a}</td> */}
                   <td>
                   <button className="btn btn-orange" onClick={()=>{this.seleccionar(item); this.modalInsertar()}}><FontAwesomeIcon icon={faPenToSquare}/></button>{"   "}
-                  <button className="btn btn-danger" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faTrash}/></button>
-                  
+                  <button className="btn btn-danger btn-separate" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faTrash}/></button>
+                  <button className="btn btn-primary btn-separate" onClick={() => {this.seleccionarCliente(item); this.setState({modalView: true})}}><FontAwesomeIcon icon={faEye} style={{color: "#ffffff"}} /></button>
+
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+
+{/* Modal para visualizar un cliente*/}
+<Modal className="modal-xl modal-dialog modal-dialog-centered modal-dialog-scrollable" isOpen={modalView}>
+  <div className="modal-content">
+    <div className="modal-header">
+      <h5 className="modal-title">Cliente</h5>
+      <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={this.cerrarModal}></button>
+    </div>
+    <div className="modal-body">
+      
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Titular</th>
+              <th>Cargo</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {clienteSeleccionado && (
+              <tr key={clienteSeleccionado.id}>
+                <td>{clienteSeleccionado.name}</td>
+                <td>{clienteSeleccionado.age}</td>
+                <td>{clienteSeleccionado.m}</td>
+                
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <h6>Información de Contacto 1</h6>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Puesto</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clienteSeleccionado && (
+              <tr key={clienteSeleccionado.id}>
+                <td>{clienteSeleccionado.s}</td>
+                <td>{clienteSeleccionado.p}</td>
+                <td>{clienteSeleccionado.c}</td>
+                <td>{clienteSeleccionado.t}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <h6>Información de Contacto 2</h6>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Puesto</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clienteSeleccionado && (
+              <tr key={clienteSeleccionado.id}>
+                <td>{clienteSeleccionado.c2}</td>
+                <td>{clienteSeleccionado.p2}</td>
+                <td>{clienteSeleccionado.co2}</td>
+                <td>{clienteSeleccionado.t2}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</Modal>
+
+
+
+          
 
           <Modal isOpen={this.state.modalInsertar}>
                 <div class="modal-header">
