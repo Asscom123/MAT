@@ -4,7 +4,7 @@ import Logo from '../assets/Logo.png'
 import Alarm from '../assets/alarm.png'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { FaRegFilePdf } from "react-icons/fa";
-import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint} from '@fortawesome/free-solid-svg-icons';
+import { faFilePen, faPenToSquare, faTrash, faTrashAlt, faPrint, faFileArrowUp} from '@fortawesome/free-solid-svg-icons';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 class OrdenesDePago extends Component {
@@ -28,7 +28,11 @@ class OrdenesDePago extends Component {
       searchTerm: '',
       currentPage: 1,
       itemsPerPage: 5,
-      currentDate: ""
+      currentDate: "",
+      modalPDF: false,
+      opSeleccionado: null,
+      facturaPDF: null,
+      contratoPDF: null
     };
   }
 
@@ -52,7 +56,33 @@ class OrdenesDePago extends Component {
     }
   }
 
-  
+  // Función para manejar la apertura/cierre del modal
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modalPDF: !prevState.modalPDF
+    }));
+  };
+
+  // Función para manejar el cambio de archivo de factura
+  handleFacturaChange = (e) => {
+    this.setState({ facturaPDF: e.target.files[0] });
+  };
+
+  // Función para manejar el cambio de archivo de contrato
+  handleContratoChange = (e) => {
+    this.setState({ contratoPDF: e.target.files[0] });
+  };
+
+
+  seleccionarOP = (op) => {
+    this.setState({ opSeleccionado: op, modalPDF: true });
+  };
+
+  // Método para cerrar el modal
+  cerrarModal = () => {
+    this.setState({ modalPDF: false });
+  };
+
   modalInsertar = () =>{
     this.setState({modalInsertar: !this.state.modalInsertar});
   }
@@ -230,7 +260,7 @@ class OrdenesDePago extends Component {
   };
 
   render() {
-    const { data, searchTerm, currentPage, itemsPerPage, currentDate , form} = this.state;
+    const { data, searchTerm, currentPage, itemsPerPage, currentDate ,modalPDF, opSeleccionado,facturaPDF, contratoPDF, form} = this.state;
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -279,7 +309,7 @@ class OrdenesDePago extends Component {
                 <th>Fecha</th>
                 <th>Mayorista</th>
                 <th>Ejecutivo Asscom</th>
-                <th>Factura</th>
+                <th>Factura</th> 
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -295,7 +325,8 @@ class OrdenesDePago extends Component {
                   <td>{item.pdf}</td>
                   <td>
                   <button className="btn btn-orange" onClick={()=>{this.seleccionar(item); this.modalInsertar()}}><FontAwesomeIcon icon={faPenToSquare}/></button>{"   "}
-                  <button className="btn btn-accion" onClick={()=>{this.seleccionar(item); this.setState({modalEliminar: true})}}><FontAwesomeIcon icon={faPrint}/></button>
+                  <button className="btn btn-accion btn-separate" onClick=''><FontAwesomeIcon icon={faPrint}/></button>
+                  <button className="btn btn-primary btn-separate" onClick={() => {this.seleccionarOP(item); this.setState({modalPDF: true})}}><FontAwesomeIcon icon={faFileArrowUp} /></button>
                   </td>
                 </tr>
               ))}
@@ -358,7 +389,7 @@ class OrdenesDePago extends Component {
                     <button class="btn btn-lg btn-success" type="button" onClick={this.modalSiguiente}>Siguiente</button>
                   </div>:
                   <div class="d-grid gap-12 col-4 mx-auto">
-                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPut()}>Actualizar</button>
+                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.modalSiguiente()}>Siguiente</button>
                   </div>
                   }
                     
@@ -384,7 +415,7 @@ class OrdenesDePago extends Component {
                       </thead>
                       <tbody>
                         {datosTabla.map(item => (
-                          <tr key={item.id}>
+                          <tr  key={item.id}>
                             {/* <td>{item.id}</td> */}
                             <td>{item.nombre}</td>
                             <td>{item.clienteF}</td>
@@ -569,6 +600,76 @@ class OrdenesDePago extends Component {
                     
                 </ModalFooter>
                 </Modal>
+
+                {/* Modal para visualizar un cliente*/}
+                <Modal className="modal-xl modal-dialog modal-dialog-centered modal-dialog-scrollable" isOpen={modalPDF} toggle={this.toggleModal}>
+        <div className="modal-content">
+          <div className="modal-header">
+            <h4 className="modal-title">Orden de Pago N° {this.state.opSeleccionado ? this.state.opSeleccionado.name : ''}</h4>
+            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={this.cerrarModal}></button>
+          </div>
+          <div className="modal-body">
+            <h6 class="text-primary-emphasis">Cliente 1</h6>
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Cotización</th>
+                    <th>Pedido autorizado del cliente</th>
+                    <th>Pedido Mayorista</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {opSeleccionado && (
+                  <tr>
+                    <td>
+                      <input type="file" onChange={this.handleContratoChange} accept=".pdf" />
+                    </td>
+                    <td>
+                      <input type="file" onChange={this.handleContratoChange} accept=".pdf" />
+                    </td>
+                    <td>
+                      <input type="file" onChange={this.handleContratoChange} accept=".pdf" />
+                    </td>
+                  </tr>
+                )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Comprobante de pago</th>
+                    <th>Factura a cliente final</th>
+                    <th>Recibo de entrega</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {opSeleccionado && (
+                  <tr>
+                    <td>
+                      <input type="file" onChange={this.handleContratoChange} accept=".pdf" />
+                    </td>
+                    <td>
+                      <input type="file" onChange={this.handleContratoChange} accept=".pdf" />
+                    </td>
+                    <td>
+                      <input type="file" onChange={this.handleContratoChange} accept=".pdf" />
+                    </td>
+                  </tr>
+                )}
+                </tbody>
+              </table>
+            </div>
+            <div class="d-grid gap-12 col-2 mx-auto">
+                    <button class="btn btn-lg btn-success" type="button" onClick={()=>this.peticionPost()}>Guardar</button>
+                  </div>
+          </div>
+        </div>
+      </Modal>
+
 
 
           <nav>

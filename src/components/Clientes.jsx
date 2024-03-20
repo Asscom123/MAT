@@ -221,7 +221,7 @@ class Clientes extends Component {
 <Modal className="modal-xl modal-dialog modal-dialog-centered modal-dialog-scrollable" isOpen={modalView}>
   <div className="modal-content">
     <div className="modal-header">
-      <h5 className="modal-title">Cliente</h5>
+      <h4 className="modal-title">Cliente</h4>
       <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={this.cerrarModal}></button>
     </div>
     <div className="modal-body">
@@ -249,7 +249,7 @@ class Clientes extends Component {
         </table>
       </div>
 
-      <h6>Información de Contacto 1</h6>
+      <h6 class="text-primary-emphasis" >Información de Contacto 1</h6>
       <div className="table-responsive">
         <table className="table">
           <thead>
@@ -273,7 +273,7 @@ class Clientes extends Component {
         </table>
       </div>
 
-      <h6>Información de Contacto 2</h6>
+      <h6 class="text-primary-emphasis">Información de Contacto 2</h6>
       <div className="table-responsive">
         <table className="table">
           <thead>
@@ -296,6 +296,53 @@ class Clientes extends Component {
           </tbody>
         </table>
       </div>
+
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Cliente</th>
+              <th>Titular</th>
+              <th>Cargo</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {clienteSeleccionado && (
+              <tr key={clienteSeleccionado.id}>
+                <td >{clienteSeleccionado.name}</td>
+                <td>{clienteSeleccionado.age}</td>
+                <td>{clienteSeleccionado.m}</td>
+                
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <h6 class="text-primary-emphasis" >Contacto de cobranza</h6>
+      <div className="table-responsive">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Puesto</th>
+              <th>Correo</th>
+              <th>Teléfono</th>
+            </tr>
+          </thead>
+          <tbody>
+            {clienteSeleccionado && (
+              <tr key={clienteSeleccionado.id}>
+                <td>{clienteSeleccionado.s}</td>
+                <td>{clienteSeleccionado.p}</td>
+                <td>{clienteSeleccionado.c}</td>
+                <td>{clienteSeleccionado.t}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </Modal>
@@ -306,7 +353,7 @@ class Clientes extends Component {
 
           <Modal isOpen={this.state.modalInsertar}>
                 <div class="modal-header">
-                  <h5 class="modal-title">Cliente</h5>
+                <h4 className="modal-title">Cliente</h4>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={()=>this.modalInsertar()}></button>
                 </div>
                 <ModalBody>
